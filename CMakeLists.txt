@@ -15,5 +15,5 @@ target_sources(quickini
       include/parser.h
 )
 
-add_executable(libtest tests/test.c)
+add_executable(libtest tests/deployment_tests/test.c)
 target_link_libraries(libtest PRIVATE quickini)

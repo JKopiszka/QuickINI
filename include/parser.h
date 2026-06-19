@@ -1,6 +1,6 @@
 /**
  * @file parser.h
- * @author Jakub Kopiszka  (kopiszkajakub20@gmail.com)
+ * @author Jakub Kopiszka (kopiszkajakub20@gmail.com)
  * @brief 
  * @version 0.1
  * @date 2026-06-19
