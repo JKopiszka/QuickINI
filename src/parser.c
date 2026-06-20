@@ -1,10 +1,10 @@
 /**
  * @file parser.c
  * @author Jakub Kopiszka (kopiszkajakub20@gmail.com)
- * @brief This file is an implementation for all 
+ * @brief This file is an implementation for all
  * @version 0.1
  * @date 2026-06-19
- * 
+ *
  * @copyright Copyright (c) 2026
  */
 
@@ -21,8 +21,8 @@
 INIFile *ini_load(const char *path)
 {
     /**
-     * @brief 
-     * 
+     * @brief
+     *
      */
 
     //* FILE OPENING *//
@@ -39,11 +39,12 @@ INIFile *ini_load(const char *path)
     fclose(inif);
 
     //* Returning INI's sections *//
-    char **sections = get_sections(file_content);
+    INISection **sections = get_sections(file_content);
 
     for (int i = 0; sections[i] != NULL; i++)
     {
-        printf("Section: %s\n", sections[i]);
+        printf("Section: %s\n", sections[i]->name);
+
         free(sections[i]);
     }
 
@@ -96,11 +97,10 @@ char *load_ini_to_string(FILE *file)
     return file_content;
 }
 
-char **get_sections(char *file_content)
+INISection **get_sections(char *file_content)
 {
-    //* DEFINITION OF EMPTY ARRAY OF CHAR ARRAYS *//
-    //* [[], []] *//
-    char **sections = NULL;
+    //* DEFINITION OF EMPTY ARRAY OF INISections ARRAYS *//
+    INISection **sections = NULL;
     int section_counter = 0;
 
     while (*file_content)
@@ -127,13 +127,22 @@ char **get_sections(char *file_content)
                 memcpy(section_name, start, name_len);
                 section_name[name_len] = '\0';
 
-                // Appending array of section names
-                sections = realloc(sections, sizeof(char *) * (section_counter + 1));
-                sections[section_counter] = section_name;
-                section_counter++;
+                INISection *new_section = malloc(sizeof(INISection));
+                new_section->name = section_name;
 
-                // moving forward
-                file_content++;
+                // Appending array of section names
+                INISection **tmp =
+                    realloc(sections, sizeof(INISection *) * (section_counter + 1));
+                if (!tmp)
+                {
+                    free(section_name);
+                    free(new_section);
+                    return sections;
+                }
+                sections = tmp;
+
+                sections[section_counter] = new_section;
+                section_counter++;
             }
         }
 
@@ -141,8 +150,11 @@ char **get_sections(char *file_content)
         file_content++;
     }
 
-    // setting nulls and empties...
-    sections = realloc(sections, sizeof(char *) * (section_counter + 1));
+    INISection **tmp2 =
+        realloc(sections, sizeof(INISection*) * (section_counter + 1));
+    if (!tmp2) return sections;
+    sections = tmp2;
+
     sections[section_counter] = NULL;
 
     return sections;

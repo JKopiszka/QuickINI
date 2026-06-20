@@ -45,7 +45,7 @@ INIFile *ini_load(const char *path);
 char *load_ini_to_string(FILE *file);
 
 //? Function returning ini's file sections array
-char **get_sections(char *file_content);
+INISection **get_sections(char *file_content);
 
 //? Function setting file's pointer free
 void ini_free(INIFile *file);
