@@ -55,10 +55,6 @@ INIFile *ini_load(const char *path)
 
 char *load_ini_to_string(FILE *file)
 {
-    //* Setting up read buffer, *//
-    //* file_content string *//
-    //* & size of the  *//
-
     char buffer[BUFFER_SIZE];
     char *file_content = NULL;
     size_t size = 0;
@@ -70,25 +66,16 @@ char *load_ini_to_string(FILE *file)
             continue;
         }
 
-        // Length of the buffer's string //
         size_t ini_chunk = strlen(buffer);
-
-        // Assignment of the file_content pointer a new size //
-        // Current file size + chunk + 1 extra //
         char *new_file_content = realloc(file_content, size + ini_chunk + 1);
 
-        // If assignment failed, free space and return null
         if (!new_file_content)
         {
             free(file_content);
             return NULL;
         }
 
-        // Assign to file_content pointer of new piece of data
         file_content = new_file_content;
-
-        // Similar to concat, copy to the  //
-        // file_content moved for size chunk from buffer //
         memcpy(file_content + size, buffer, ini_chunk);
         size += ini_chunk;
         file_content[size] = '\0';
@@ -99,34 +86,32 @@ char *load_ini_to_string(FILE *file)
 
 INISection **get_sections(char *file_content)
 {
+<<<<<<< HEAD
     //* DEFINITION OF EMPTY ARRAY OF INISections ARRAYS *//
     INISection **sections = NULL;
+=======
+    char **sections = NULL;
+>>>>>>> parent of 3a8f8e7 (comments)
     int section_counter = 0;
 
     while (*file_content)
     {
-        //* Checking if section definition started *//
         if (*file_content == '[')
         {
-            // Tagging up starting point of the name address
             char *start = file_content + 1;
 
-            // Going through the rest of the file content //
-            // until it's not the end or end tag of the section def //
             while (*file_content && *file_content != ']')
                 file_content++;
 
             if (*file_content == ']')
             {
-                // getting length of the name
-                // (how many chars)
                 size_t name_len = file_content - start;
 
-                // copying the whole thing
                 char *section_name = malloc(name_len + 1);
                 memcpy(section_name, start, name_len);
                 section_name[name_len] = '\0';
 
+<<<<<<< HEAD
                 INISection *new_section = malloc(sizeof(INISection));
                 new_section->name = section_name;
 
@@ -143,18 +128,28 @@ INISection **get_sections(char *file_content)
 
                 sections[section_counter] = new_section;
                 section_counter++;
+=======
+                sections = realloc(sections, sizeof(char *) * (section_counter + 1));
+                sections[section_counter] = section_name;
+                section_counter++;
+
+                file_content++;
+>>>>>>> parent of 3a8f8e7 (comments)
             }
         }
 
-        // Moving forward if nothing found
         file_content++;
     }
 
+<<<<<<< HEAD
     INISection **tmp2 =
         realloc(sections, sizeof(INISection*) * (section_counter + 1));
     if (!tmp2) return sections;
     sections = tmp2;
 
+=======
+    sections = realloc(sections, sizeof(char *) * (section_counter + 1));
+>>>>>>> parent of 3a8f8e7 (comments)
     sections[section_counter] = NULL;
 
     return sections;
