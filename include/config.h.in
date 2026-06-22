@@ -1,0 +1,2 @@
+#define LIB_VERSION "@GIT_TAG@"
+#define LIB_DEBUG @DEBUG_MODE@

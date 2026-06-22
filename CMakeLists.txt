@@ -17,3 +17,15 @@ target_sources(quickini
 
 add_executable(libtest tests/deployment_tests/test.c)
 target_link_libraries(libtest PRIVATE quickini)
+
+execute_process(
+    COMMAND git describe --tags --abbrev=0
+    OUTPUT_VARIABLE GIT_TAG
+    OUTPUT_STRIP_TRAILING_WHITESPACE
+)
+
+configure_file(
+    ${CMAKE_SOURCE_DIR}/config.h.in
+    ${CMAKE_BINARY_DIR}/config.h
+    @ONLY
+)
